@@ -6,8 +6,8 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+import base.BaseTest;
 import io.qameta.allure.Attachment;
-import qa.base.BaseTest;
 
 public class TestAllureListener implements ITestListener {
 	
@@ -53,6 +53,5 @@ public class TestAllureListener implements ITestListener {
 	private byte[] saveScreenshotPNG(WebDriver driver) {
 		return ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
 	}
-	
 	
 }

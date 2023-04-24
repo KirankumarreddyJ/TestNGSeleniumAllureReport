@@ -15,6 +15,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import base.BaseTest;
 import dataproviders.MyDataProvider;
 import helpers.ConfigHelper;
 import io.qameta.allure.Description;
@@ -27,7 +28,6 @@ import io.qameta.allure.Story;
 import listeners.TestAllureListener;
 import pages.HomePage;
 import pages.LoginPage;
-import qa.base.BaseTest;
 
 @Listeners(value = TestAllureListener.class)
 public class LoginTest{

@@ -4,9 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
-import constants.Constants;
 
-import qa.base.BaseTest;
+import base.BaseTest;
+import constants.Constants;
 
 public class ConfigHelper extends BaseTest{
 	

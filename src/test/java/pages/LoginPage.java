@@ -8,9 +8,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
+import base.BaseTest;
 import helpers.SeleniumHelper;
 import io.qameta.allure.Step;
-import qa.base.BaseTest;
 
 public class LoginPage extends BaseTest{
 	public final static String LOGINPAGEURL = "https://www.saucedemo.com/";
