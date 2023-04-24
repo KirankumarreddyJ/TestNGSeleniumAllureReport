@@ -16,7 +16,7 @@
 		<maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
 
 		<!-- #Update Alure Result Directory Path here-->
-		<allure-results-directory.path>D:/allure-results</allure-results-directory.path>
+		<allure-results-directory.path>${session.executionRootDirectory}\allure-results</allure-results-directory.path>
 		
 		<!-- #Update link pattern for tms & link annotation 
 		Note: Allure will replace {} placeholders with the value specified in the annotation.
@@ -97,7 +97,7 @@
 					<configuration>
 
 						<suiteXmlFiles>
-							<suiteXmlFile>testng.xml</suiteXmlFile>
+							<!-- <suiteXmlFile>testng.xml</suiteXmlFile>-->
 						</suiteXmlFiles>
 						<argLine>
                     -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
