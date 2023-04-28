@@ -4,6 +4,11 @@
 # target files
 /target/
 
+# resuts
+/allure-report/
+/allure-results/
+/test-output/
+
 # Log file
 *.log
 
