@@ -15,6 +15,7 @@ public class ConfigHelper extends BaseTest{
 		try {
 			FileInputStream fi = new FileInputStream(Constants.CONFIG_FILE_PATH);
 			prop.load(fi);
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -28,11 +29,11 @@ public class ConfigHelper extends BaseTest{
 	}
 	
 	public static String getConfigStrVal(String key) {
-		return prop.getProperty(key);
+		return prop.getProperty(key).trim();
 	}
 	
 	public static int getConfigIntVal(String key) {
-		return Integer.parseInt(prop.getProperty(key));
+		return Integer.parseInt(prop.getProperty(key).trim());
 	}
 	
 }

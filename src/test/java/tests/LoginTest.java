@@ -25,6 +25,7 @@ import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Step;
 import io.qameta.allure.Story;
+import listeners.RetryAnalyzer;
 import listeners.TestAllureListener;
 import pages.HomePage;
 import pages.LoginPage;
@@ -52,7 +53,7 @@ public class LoginTest{
 		baseTest.tearDown();
 	}
 	
-	@Test(dataProvider = "getValidLoginData", dataProviderClass = MyDataProvider.class)
+	@Test(dataProvider = "getValidLoginData", dataProviderClass = MyDataProvider.class,enabled = true)
 	@Description(value = "Verify valid Login")
 	@Severity(SeverityLevel.BLOCKER)
 	@Feature(value = "Login Feature")
@@ -62,18 +63,19 @@ public class LoginTest{
 		loginPage.login(username, pwd);
 	}
 	
-	
-	@Test(dataProvider = "getInvalidLoginData", dataProviderClass = MyDataProvider.class)
+	@Test(dataProvider = "getInvalidLoginData", dataProviderClass = MyDataProvider.class, 
+			enabled=true, retryAnalyzer = RetryAnalyzer.class )
 	@Description(value = "Verify invalid Login")
 	@Severity(SeverityLevel.NORMAL)
 	@Feature(value = "Login Feature")
 	@Epic(value = "Login Functionality")
 	@Story(value = "QA001")
 	public void verifyInValidLogin(String username, String pwd) {
+		System.out.println("User name: "+username+" Password: "+pwd);
 		loginPage.login(username, pwd);
 	}
 	
-	@Test(dataProvider = "getValidLoginData", dataProviderClass = MyDataProvider.class)
+	@Test(dataProvider = "getValidLoginData", dataProviderClass = MyDataProvider.class, enabled = false)
 	@Description(value = "Verify Login and Logout")
 	@Severity(SeverityLevel.CRITICAL)
 	@Feature(value = "Login Feature")

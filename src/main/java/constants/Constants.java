@@ -11,4 +11,7 @@ public class Constants {
 	//Test data excel path
 	public static final String TESTDATA_SHEET_PATH = PROJECT_PATH + "/src/main/resources/testdata/testdata.xlsx";
 	
+	//Login details sheet name
+	public static final String TESTDATA_LOGIN_SHEET = "Login Details";
+	
 }

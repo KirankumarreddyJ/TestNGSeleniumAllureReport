@@ -73,6 +73,7 @@ public class BaseTest {
 //	@AfterClass
 	public void tearDown() {
 		getDriver().quit();
+		System.out.println("value of driver after quit "+ BaseTest.getDriver());
 	}
 //	
 //	public Properties initialize_Properties() {
