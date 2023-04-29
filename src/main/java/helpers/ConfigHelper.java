@@ -8,8 +8,27 @@ import java.util.Properties;
 import base.BaseTest;
 import constants.Constants;
 
+/* #########################################################################
+Class Name   : ConfigHelper
+Purpose      : This class handles the config file and retrieves data.
+               This class will contain all common methods which will be 
+               helpful to get data from config properties file
+
+Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+Created Date : 29/04/2023 
+############################################################################# */
+
 public class ConfigHelper extends BaseTest{
 	
+	/*   ###############################################################
+	Method Name  : initialize_Properties
+	Purpose      : To load the config properties file and return object
+	Input        : None
+	Output       : Properties object
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 29/04/2023 
+	##################################################################### */
 	public static Properties initialize_Properties() {
 		prop = new Properties();
 		try {
@@ -24,14 +43,42 @@ public class ConfigHelper extends BaseTest{
 		return prop;
 	}
 	
+	/*   ###############################################################
+	Method Name  : getPropertyObj
+	Purpose      : To get the value of give Key in property file
+	Input        : None
+	Output       : Properties object
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 29/04/2023 
+	##################################################################### */
 	public static Properties getPropertyObj() {
 		return prop;
 	}
 	
+	/*   ###############################################################
+	Method Name  : getConfigStrVal
+	Purpose      : To get the string value of give Key in property file
+	Input        : String Key
+	Output       : String value
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 29/04/2023 
+	##################################################################### */
 	public static String getConfigStrVal(String key) {
 		return prop.getProperty(key).trim();
 	}
 	
+	
+	/*   ###############################################################
+	Method Name  : getConfigStrVal
+	Purpose      : To get the integer value of give Key in property file
+	Input        : String Key
+	Output       : int value
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 29/04/2023 
+	##################################################################### */
 	public static int getConfigIntVal(String key) {
 		return Integer.parseInt(prop.getProperty(key).trim());
 	}
