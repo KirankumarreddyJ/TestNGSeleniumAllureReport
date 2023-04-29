@@ -1,5 +1,8 @@
 package dataproviders;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.testng.annotations.DataProvider;
 
 import helpers.ExcelHelper;
@@ -8,6 +11,7 @@ import constants.Constants;
 public class MyDataProvider {
 	private static final String excePath = Constants.TESTDATA_SHEET_PATH;
 	private static final String loginSheet = Constants.TESTDATA_LOGIN_SHEET;
+	private static final String regSheet = Constants.TESTDATA_REG_SHEET;
 	
 	@DataProvider(name = "getValidLoginData")
 	public Object[][] getValidLoginData() {
@@ -27,11 +31,23 @@ public class MyDataProvider {
 	
 	@DataProvider(name = "getInvalidLoginData")
 	public Object[][] getInvalidLoginData() {
-		Object contactsData[][] = {{
+		Object[][] contactsData = {{
 			ExcelHelper.getCellDataFromRowColNumbers(excePath, loginSheet, 2, 4),
 			ExcelHelper.getCellDataFromRowColNumbers(excePath, loginSheet, 2, 5),
 			}};
 		return contactsData;
+	}
+	
+	@DataProvider(name = "getRegDetails")
+	public Object[][] getRegData(){
+		List<String> cols = Arrays.asList(new String[] {
+				"First Name", "Last Name", "Address", "Email", "Phone", "Gender", 
+				"Hobbies", "Languages", "Skills", "Country", "DoB Year", "DoB Month",
+				"DoB Day", "Password", "Confirm Password"});
+		Object[][] regData = {
+			ExcelHelper.getDataFromColNamesInRowNum(excePath, regSheet, 2, cols)
+			};
+		return regData;
 	}
 }
 

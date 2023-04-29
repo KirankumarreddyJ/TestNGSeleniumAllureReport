@@ -11,6 +11,8 @@
 		<webdrivermanager.version>5.3.2</webdrivermanager.version>
 		<selenium-java.version>4.8.3</selenium-java.version>
 		<allure-testng.version>2.17.3</allure-testng.version>
+		<allure-maven.version>2.10.0</allure-maven.version>
+		<allure-maven-report.version>2.14.0</allure-maven-report.version>
 		<apache-poi.version>5.1.0</apache-poi.version>
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 		<maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
@@ -71,6 +73,21 @@
 			<version>${apache-poi.version}</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.17.2</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.17.2</version>
+		</dependency>
+
+
 	</dependencies>
 	<build>
 		<pluginManagement>
@@ -105,7 +122,8 @@
 					<configuration>
 
 						<suiteXmlFiles>
-							<!-- <suiteXmlFile>testng.xml</suiteXmlFile>-->
+							<!-- <suiteXmlFile>test-suites\testng.xml</suiteXmlFile>-->
+							<suiteXmlFile>test-suites\regTest.xml</suiteXmlFile>
 						</suiteXmlFiles>
 						<argLine>
                     -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
@@ -124,6 +142,16 @@
 							<version>${aspectj.version}</version>
 						</dependency>
 					</dependencies>
+				</plugin>
+
+				<!-- Allure Run commands: 1) "mvn clean test" or 2) "mvn allure:serve" or 3) "mvn allure:report"-->
+				<plugin>
+					<groupId>io.qameta.allure</groupId>
+					<artifactId>allure-maven</artifactId>
+					<version>${allure-maven.version}</version>
+					<configuration>
+						<reportVersion>${allure-maven-report.version}</reportVersion>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
