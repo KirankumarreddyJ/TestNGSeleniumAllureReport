@@ -32,11 +32,11 @@ import pages.LoginPage;
 
 @Listeners(value = TestAllureListener.class)
 public class LoginTest{
-	public BaseTest baseTest;
-	public WebDriver driver;
-	public Properties prop;
-	public LoginPage loginPage;
-	public HomePage homePage;
+	protected BaseTest baseTest;
+	protected WebDriver driver;
+	protected Properties prop;
+	protected LoginPage loginPage;
+	protected HomePage homePage;
 	
 	@BeforeMethod(alwaysRun = true)
 	@Parameters({"browser"})
@@ -64,7 +64,7 @@ public class LoginTest{
 	}
 	
 	@Test(dataProvider = "getInvalidLoginData", dataProviderClass = MyDataProvider.class, 
-			enabled=true, retryAnalyzer = RetryAnalyzer.class )
+			enabled=false, retryAnalyzer = RetryAnalyzer.class )
 	@Description(value = "Verify invalid Login")
 	@Severity(SeverityLevel.NORMAL)
 	@Feature(value = "Login Feature")

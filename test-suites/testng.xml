@@ -4,7 +4,6 @@
 <suite name="SmokeTests" parallel="none" thread-count="2">
 	<listeners>
 		<listener class-name="listeners.TestAllureListener"></listener>
-		<listener class-name="listeners.RetryAnalyzer"></listener>
 		<listener class-name="listeners.AnnotationTransfer"></listener>
 	</listeners>
 	<test thread-count="2" name="Test1">

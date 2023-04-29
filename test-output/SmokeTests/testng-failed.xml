@@ -3,17 +3,18 @@
 <suite thread-count="2" guice-stage="DEVELOPMENT" name="Failed suite [SmokeTests]">
   <listeners>
     <listener class-name="listeners.TestAllureListener"/>
+    <listener class-name="listeners.AnnotationTransfer"/>
   </listeners>
-  <test thread-count="2" name="Test2(failed)">
-    <parameter name="browser" value="edge"/>
+  <test thread-count="2" name="Test1(failed)">
+    <parameter name="browser" value="chrome"/>
     <classes>
       <class name="tests.LoginTest">
         <methods>
-          <include name="verifyInValidLogin" invocation-numbers="0"/>
+          <include name="verifyValidLogin"/>
           <include name="setUp"/>
           <include name="tearDown"/>
         </methods>
       </class> <!-- tests.LoginTest -->
     </classes>
-  </test> <!-- Test2(failed) -->
+  </test> <!-- Test1(failed) -->
 </suite> <!-- Failed suite [SmokeTests] -->
