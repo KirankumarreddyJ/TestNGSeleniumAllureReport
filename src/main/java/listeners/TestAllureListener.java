@@ -10,6 +10,13 @@ import org.testng.ITestResult;
 import base.BaseTest;
 import io.qameta.allure.Attachment;
 
+/* #########################################################################
+Class Name   : TestAllureListener
+Purpose      : This class handles to perform steps based on test status
+
+Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+Created Date : 29/04/2023 
+############################################################################# */
 public class TestAllureListener implements ITestListener {
 
 	private static String getTestMethodName(ITestResult iTestResult) {
@@ -24,8 +31,8 @@ public class TestAllureListener implements ITestListener {
 		// Allure ScreenShotRobot and SaveTestLog
 		
 		if (driver instanceof WebDriver && !driver.toString().contains("null")) {
-			System.out.println("Screenshot captured for test case:" + getTestMethodName(iTestResult));
 			saveScreenshotPNG(driver);
+			System.out.println("Screenshot captured for test case:" + getTestMethodName(iTestResult));
 			// Save a log on allure.
 			saveTextLog(getTestMethodName(iTestResult) + " passed and screenshot taken!");
 		} else {
@@ -41,8 +48,8 @@ public class TestAllureListener implements ITestListener {
 		WebDriver driver = BaseTest.getDriver();
 		// Allure ScreenShotRobot and SaveTestLog
 		if (driver instanceof WebDriver && !driver.toString().contains("null")) {
-			System.out.println("Screenshot captured for test case:" + getTestMethodName(iTestResult));
 			saveScreenshotPNG(driver);
+			System.out.println("Screenshot captured for test case:" + getTestMethodName(iTestResult));
 		}
 		// Save a log on allure.
 		saveTextLog(getTestMethodName(iTestResult) + " failed and screenshot taken!");

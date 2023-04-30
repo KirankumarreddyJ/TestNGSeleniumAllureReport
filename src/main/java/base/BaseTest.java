@@ -1,25 +1,26 @@
 package base;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.time.Duration;
 import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.devtools.v109.browser.Browser;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import helpers.ConfigHelper;
+import helpers.SeleniumHelper;
 
+/* #########################################################################
+Class Name   : BaseTest
+Purpose      : This is a base class to all test classes
+               This class will handle webdriver & browser setup and teardown
+Note         : This class can be used to define Before & After setup for 
+               module & test level execution
+
+Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+Created Date : 25/04/2023 
+############################################################################# */
 public class BaseTest {
 	
 	public WebDriver driver;
@@ -27,65 +28,56 @@ public class BaseTest {
 	
 	public static ThreadLocal<WebDriver> tdriver = new ThreadLocal<>();
 	
-//	@BeforeClass(alwaysRun = true)
-//	@Parameters({"browser"})
-//	public WebDriver initialize_driver(@Optional("chrome") String browser) {
-	public WebDriver initialize_driver(String browser) {
-		if(browser.equals(null)) {
+	@BeforeSuite(alwaysRun = true)
+	public void setUpSuite() {
+		//Loads the properties file
+		prop = ConfigHelper.initialize_Properties();
+	}
+	
+//	@AfterSuite(alwaysRun = true)
+//	public void tearDownSuite() {
+//		// Write code to execute after suite execution
+//	}
+//	
+//	@BeforeTest(alwaysRun = true)
+//	public void setUpTest() {
+//		// Write code to execute before test execution
+//	}
+//	
+//	@AfterTest(alwaysRun = true)
+//	public void tearDownTest() {
+//		// Write code to execute after test execution
+//	}
+	
+	/*   ###############################################################
+	Method Name  : setupDriver
+	Purpose      : Open browser based on browser name and set driver to thread local
+	Input        : String browserName
+	Output       : WebDriver driver
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 25/04/2023 
+	##################################################################### */
+	public WebDriver setupDriver(String browserName) {
+		if(browserName.equals(null)) {
 			throw new IllegalArgumentException("Browser value can't be null");
 		}
-		
-		switch(browser.toLowerCase()) {
-		case "chrome":
-			WebDriverManager.chromedriver().setup();
-			driver = new ChromeDriver();
-			System.out.println("Chrome browser started");
-			break;
-		case "firefox":
-			WebDriverManager.firefoxdriver().setup();
-			driver = new FirefoxDriver();
-			System.out.println("Firefox browser started");
-			break;
-		case "edge":
-			WebDriverManager.edgedriver().setup();
-			driver = new EdgeDriver();
-			System.out.println("Edge browser started");
-			break;
-		case "ie":
-			WebDriverManager.iedriver().setup();
-			driver = new EdgeDriver();
-			System.out.println("IE browser started");
-			break;
-		default:
-			throw new IllegalArgumentException("Browser name is invalid");
-		}
-		driver.manage().window().maximize();
-		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
-//		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		driver = SeleniumHelper.launchBrowser(browserName);
 		tdriver.set(driver);
 		return getDriver();
 	}
-
+	
+	/*   ###############################################################
+	Method Name  : getDriver
+	Purpose      : To get driver object from thread local
+	Input        : None
+	Output       : WebDriver driver
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 25/04/2023 
+	##################################################################### */
 	public static synchronized WebDriver getDriver() {
 		return tdriver.get();
 	}
-	
-//	@AfterClass
-	public void tearDown() {
-		getDriver().quit();
-		System.out.println("value of driver after quit "+ BaseTest.getDriver());
-	}
-//	
-//	public Properties initialize_Properties() {
-//		prop = new Properties();
-//		try {
-//			FileInputStream fi = new FileInputStream(System.getProperty("user.dir")+"/src/main/java/config/config.properties");
-//			prop.load(fi);
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return prop;
-//	}
+
 }

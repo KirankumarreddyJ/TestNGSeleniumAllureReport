@@ -12,6 +12,9 @@ import base.BaseTest;
 import helpers.SeleniumHelper;
 import io.qameta.allure.Step;
 
+/*
+ * This class contains all Login page web elements & action methods
+ */
 public class LoginPage extends BaseTest{
 	public final static String LOGINPAGEURL = "https://www.saucedemo.com/";
 	public static SeleniumHelper selHelper;
@@ -20,7 +23,7 @@ public class LoginPage extends BaseTest{
 	public LoginPage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		selHelper = new SeleniumHelper(driver);
+		selHelper = new SeleniumHelper(this.driver);
 //		PageFactory.initElements(new AjaxElementLocatorFactory(driver, 5), this);
 	}
 	
@@ -39,11 +42,6 @@ public class LoginPage extends BaseTest{
 		selHelper.enterVal(password, pwd);
 		selHelper.click(loginBtn);
 		assertEquals(selHelper.getCurrentURL(), HomePage.HOMEPAGEURL);
-		
-//		userId.sendKeys(username);
-//		password.sendKeys(pwd);
-//		loginBtn.click();
-//		assertEquals(driver.getCurrentUrl(), HomePage.HOMEPAGEURL);
 		return  new HomePage(driver);
 	}
 	

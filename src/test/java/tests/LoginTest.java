@@ -1,29 +1,21 @@
 package tests;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-
-import java.util.Properties;
-
-import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import base.BaseTest;
+import constants.Constants;
 import dataproviders.MyDataProvider;
-import helpers.ConfigHelper;
+import helpers.SeleniumHelper;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.Step;
 import io.qameta.allure.Story;
 import listeners.RetryAnalyzer;
 import listeners.TestAllureListener;
@@ -31,26 +23,23 @@ import pages.HomePage;
 import pages.LoginPage;
 
 @Listeners(value = TestAllureListener.class)
-public class LoginTest{
+public class LoginTest extends BaseTest{
 	protected BaseTest baseTest;
-	protected WebDriver driver;
-	protected Properties prop;
 	protected LoginPage loginPage;
 	protected HomePage homePage;
 	
 	@BeforeMethod(alwaysRun = true)
 	@Parameters({"browser"})
-	public void setUp(@Optional("chrome") String browser) {
+	public void setUpMethod(@Optional("") String browser) {
 		baseTest = new BaseTest();
-		prop = ConfigHelper.initialize_Properties();
-		driver = baseTest.initialize_driver(browser);
-		driver.get(prop.getProperty("url"));
-		loginPage = new LoginPage(driver);
+		baseTest.setupDriver(browser);
+		SeleniumHelper.navigateToURL(getDriver(), Constants.SEUCEDEMO_LOGIN_URL);
+		loginPage = new LoginPage(getDriver());
 	}
 	
 	@AfterMethod
-	public void tearDown() {
-		baseTest.tearDown();
+	public void tearDownMethod() {
+		SeleniumHelper.closeAllBrowsers(getDriver());
 	}
 	
 	@Test(dataProvider = "getValidLoginData", dataProviderClass = MyDataProvider.class,enabled = true)
@@ -64,7 +53,7 @@ public class LoginTest{
 	}
 	
 	@Test(dataProvider = "getInvalidLoginData", dataProviderClass = MyDataProvider.class, 
-			enabled=false, retryAnalyzer = RetryAnalyzer.class )
+			enabled=true, retryAnalyzer = RetryAnalyzer.class )
 	@Description(value = "Verify invalid Login")
 	@Severity(SeverityLevel.NORMAL)
 	@Feature(value = "Login Feature")
@@ -75,7 +64,7 @@ public class LoginTest{
 		loginPage.login(username, pwd);
 	}
 	
-	@Test(dataProvider = "getValidLoginData", dataProviderClass = MyDataProvider.class, enabled = false)
+	@Test(dataProvider = "getValidLoginData", dataProviderClass = MyDataProvider.class, enabled = true)
 	@Description(value = "Verify Login and Logout")
 	@Severity(SeverityLevel.CRITICAL)
 	@Feature(value = "Login Feature")

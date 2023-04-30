@@ -13,6 +13,9 @@ import base.BaseTest;
 import helpers.SeleniumHelper;
 import io.qameta.allure.Step;
 
+/*
+ * This class contains all Home page web elements & action methods
+ */
 public class HomePage extends BaseTest{
 	public final static String HOMEPAGEURL = "https://www.saucedemo.com/inventory.html";
 	public static SeleniumHelper selHelper;
@@ -20,7 +23,7 @@ public class HomePage extends BaseTest{
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		selHelper = new SeleniumHelper(driver);
+		selHelper = new SeleniumHelper(this.driver);
 //		PageFactory.initElements(new AjaxElementLocatorFactory(driver, 5), this);
 	}
 	
@@ -44,10 +47,6 @@ public class HomePage extends BaseTest{
 		selHelper.wait.until(ExpectedConditions.urlContains(LoginPage.LOGINPAGEURL));
 		assertEquals(selHelper.getCurrentURL(), LoginPage.LOGINPAGEURL);
 		
-		//Using page factory elements directly
-//		menuIcon.click();
-//		logoutBtn.click();
-//		assertEquals(driver.getCurrentUrl(), LoginPage.LOGINPAGEURL);
 	}
 	
 	

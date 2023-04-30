@@ -14,13 +14,16 @@ import base.BaseTest;
 import helpers.SeleniumHelper;
 import io.qameta.allure.Step;
 
+/*
+ * This class contains all Automation registration page web elements & action methods
+ */
 public class RegPage extends BaseTest{
 	public static SeleniumHelper selHelper;
 
 	public RegPage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		selHelper = new SeleniumHelper(driver);
+		selHelper = new SeleniumHelper(this.driver);
 //		PageFactory.initElements(new AjaxElementLocatorFactory(driver, 5), this);
 	}
 	

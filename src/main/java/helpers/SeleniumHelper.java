@@ -9,12 +9,17 @@ import java.util.function.Function;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
@@ -22,6 +27,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import base.BaseTest;
 import constants.Constants;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Step;
 
 /* #########################################################################
@@ -32,14 +38,14 @@ Purpose      : This class handles to perform actions on web page.
 Note         : Define default wait time in Config property file
 
 Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
-Created Date : 29/04/2023 
+Created Date : 25/04/2023 
 ############################################################################# */
-
 public class SeleniumHelper {
 	WebDriver driver;
 	static Properties prop;
 	JavascriptExecutor executor;
 	public WebDriverWait wait;
+	public Actions actions;
 	private static final int DEFAULT_WAIT = ConfigHelper.getConfigIntVal("DEFAULT_ELEMENT_WAIT_TIME");
 	
 	public SeleniumHelper(WebDriver driver) {
@@ -50,6 +56,59 @@ public class SeleniumHelper {
 	
 	
 	/***************** Webpage navigation Methods ********************/
+	/*   ###############################################################
+	Method Name  : launchBrowser
+	Purpose      : Open browser based on browser name
+	Input        : String browser
+	Output       : WebDriver driver or null
+	Note         : Supported browsers [Chrome, Firefox, Edge, IE]
+				   Declare default browser in config properties file
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 25/04/2023 
+	##################################################################### */
+	public static WebDriver launchBrowser(String browser) {
+		WebDriver driver;
+		if(browser.equalsIgnoreCase("")) {
+			browser = Constants.DEFAULT_BROWSER;
+		}
+		try {
+			switch(browser.toLowerCase()) {
+			case "chrome":
+				WebDriverManager.chromedriver().setup();
+				driver = new ChromeDriver();
+				System.out.println("Chrome browser started");
+				break;
+			case "firefox":
+				WebDriverManager.firefoxdriver().setup();
+				driver = new FirefoxDriver();
+				System.out.println("Firefox browser started");
+				break;
+			case "edge":
+				WebDriverManager.edgedriver().setup();
+				driver = new EdgeDriver();
+				System.out.println("Edge browser started");
+				break;
+			case "ie":
+				WebDriverManager.iedriver().setup();
+				driver = new EdgeDriver();
+				System.out.println("IE browser started");
+				break;
+			default:
+				throw new IllegalArgumentException("Browser name is invalid");
+			}
+			SeleniumHelper.maximizeBrowser(driver);
+			SeleniumHelper.setPageLoadTimeout(driver, Constants.PAGE_LOAD_TIMEOUT);
+			
+//	      Note: Commenting below line as this framework handles synchronization with explicit waits in Selenium Helper class
+//		    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Constants.DEFAULT_ELEMENT_WAIT_TIME));
+			
+			return driver;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	/*   ###############################################################
 	Method Name  : navigateToURL
 	Purpose      : Navigate to URL and wait until URL matches
@@ -127,19 +186,212 @@ public class SeleniumHelper {
 		return false;
 	}
 	
+	/*   ###############################################################
+	Method Name  : setPageLoadTimeout
+	Purpose      : To set page load timeout of browser
+	Input        : WebDriver driver, int timeOutSeconds
+	Output       : Boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 30/04/2023 
+	##################################################################### */
+	public static boolean setPageLoadTimeout(WebDriver driver, int timeOutSeconds) {
+		try {
+			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(timeOutSeconds));
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/*   ###############################################################
+	Method Name  : maximizeBrowser
+	Purpose      : To maximize the browser
+	Input        : WebDriver driver
+	Output       : Boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 30/04/2023 
+	##################################################################### */
+	public static boolean maximizeBrowser(WebDriver driver) {
+		try {
+			driver.manage().window().maximize();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/*   ###############################################################
+	Method Name  : minimizeBrowser
+	Purpose      : To minimize the browser
+	Input        : WebDriver driver
+	Output       : Boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 30/04/2023 
+	##################################################################### */
+	public static boolean minimizeBrowser(WebDriver driver) {
+		try {
+			driver.manage().window().minimize();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/*   ###############################################################
+	Method Name  : setBrowserWindowSize
+	Purpose      : To set browser window size
+	Input        : WebDriver driver, int height, int width
+	Output       : Boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 30/04/2023 
+	##################################################################### */
+	public static boolean setBrowserWindowSize(WebDriver driver, int height, int width) {
+		try {
+			driver.manage().window().setSize(new Dimension(height, width));
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/*   ###############################################################
+	Method Name  : executeScript
+	Purpose      : To execute javascript code using JavascriptExecutor
+	Input        : String script
+	Output       : Boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 29/04/2023 
+	##################################################################### */
+	public boolean executeScript(String script) {
+		try {
+			getJavascriptExecutor(driver).executeScript(script);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/*   ###############################################################
+	Method Name  : executeScript
+	Purpose      : To execute javascript code using JavascriptExecutor
+	Input        : String script
+	Output       : Boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 29/04/2023 
+	##################################################################### */
+	public boolean scrollPage(int xAxis, int yAxis) {
+		try {
+			executeScript("scroll("+String.valueOf(xAxis)+","+String.valueOf(yAxis)+")");
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/*   ###############################################################
+	Method Name  : closeOnlyFocusedWindowOrTab
+	Purpose      : To close only driver focused browser window or tab
+	Input        : WebDriver driver
+	Output       : Boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 30/04/2023 
+	##################################################################### */
+	public static boolean closeOnlyFocusedWindowOrTab(WebDriver driver) {
+		try {
+			driver.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/*   ###############################################################
+	Method Name  : closeAllBrowsers
+	Purpose      : To close all browsers opened by given driver
+	Input        : WebDriver driver
+	Output       : Boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 30/04/2023 
+	##################################################################### */
+	public static boolean closeAllBrowsers(WebDriver driver) {
+		try {
+			driver.quit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	
 	/***************** Get Methods from Webpage  ********************/
 	/*   ###############################################################
 	Method Name  : getWebDriverWait
 	Purpose      : To create WebDriverWait object
 	Input        : WebDriver driver, int seconds
-	Output       : WebDriverWait object
+	Output       : WebDriverWait object or null
 	
 	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
 	Created Date : 29/04/2023 
 	##################################################################### */
 	public static WebDriverWait getWebDriverWait(WebDriver driver, int seconds) {
-		return new WebDriverWait(driver, Duration.ofSeconds(seconds));
+		try {
+			return new WebDriverWait(driver, Duration.ofSeconds(seconds));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/*   ###############################################################
+	Method Name  : getActions
+	Purpose      : To get Actions class object
+	Input        : WebDriver driver
+	Output       : Actions object or null
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 29/04/2023 
+	##################################################################### */
+	public static Actions getActions(WebDriver driver) {
+		try {
+			return new Actions(driver);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/*   ###############################################################
+	Method Name  : getJavascriptExecutor
+	Purpose      : To get JavascriptExecutor class object
+	Input        : WebDriver driver
+	Output       : JavascriptExecutor object or null
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 29/04/2023 
+	##################################################################### */
+	public static JavascriptExecutor getJavascriptExecutor(WebDriver driver) {
+		try {
+			return ((JavascriptExecutor) driver);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/*   ###############################################################
@@ -207,8 +459,9 @@ public class SeleniumHelper {
 	##################################################################### */
 	public String getElementText(WebElement element) {
 		try {
-			wait.until(ExpectedConditions.visibilityOf(element));
-			return element.getText();
+			if(verifyDisplayed(element)) {
+				return element.getText();	
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -418,7 +671,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean click(WebElement element){
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			verifyEnabled(element);
 			element.click();
 			return true;
 		} catch (Exception e) {
@@ -429,6 +682,50 @@ public class SeleniumHelper {
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
+		}
+		return false;
+	}
+	
+	/*   ###############################################################
+	Method Name  : rightClick
+	Purpose      : To right click on the web page
+	Input        : WebElement element
+	Output       : boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 30/04/2023 
+	##################################################################### */
+	public boolean rightClick(WebElement element){
+		try {
+			if(verifyEnabled(element)) {
+			actions = new Actions(driver);
+			actions.contextClick(element).build().perform();;
+			return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/*   ###############################################################
+	Method Name  : doubleClick
+	Purpose      : To double click on the web page
+	Input        : WebElement element
+	Output       : boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 30/04/2023 
+	##################################################################### */
+	public boolean doubleClick(WebElement element){
+		try {
+			if(verifyEnabled(element)) {
+			actions = new Actions(driver);
+			actions.doubleClick(element).build().perform();;
+			return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -447,6 +744,28 @@ public class SeleniumHelper {
 			wait.until(ExpectedConditions.elementToBeClickable(element));
 			element.submit();
 			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/*   ###############################################################
+	Method Name  : mouseHover
+	Purpose      : To mouse hover on web element in web page
+	Input        : WebElement element
+	Output       : boolean true/false
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 30/04/2023 
+	##################################################################### */
+	public boolean mouseHover(WebElement element){
+		try {
+			if(verifyEnabled(element)) {
+			actions = new Actions(driver);
+			actions.moveToElement(element).build().perform();;
+			return true;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

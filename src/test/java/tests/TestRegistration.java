@@ -1,10 +1,8 @@
 package tests;
 
-import java.util.Properties;
-
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -12,50 +10,46 @@ import org.testng.annotations.Test;
 import base.BaseTest;
 import constants.Constants;
 import dataproviders.MyDataProvider;
-import helpers.ConfigHelper;
+import helpers.SeleniumHelper;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
-import pages.HomePage;
-import pages.LoginPage;
+import listeners.TestAllureListener;
 import pages.RegPage;
 
-public class TestRegistration {
+@Listeners(value = TestAllureListener.class)
+public class TestRegistration extends BaseTest {
 	protected BaseTest baseTest;
-	protected WebDriver driver;
-	protected Properties prop;
 	protected RegPage regPage;
 
-	
-	@BeforeMethod(alwaysRun = true)
-	@Parameters({"browser"})
-	public void setUp(@Optional("chrome") String browser) {
+	@BeforeClass(alwaysRun = true)
+	@Parameters({ "browser" })
+	public void setUpClass(@Optional("") String browser) {
 		baseTest = new BaseTest();
-		prop = ConfigHelper.initialize_Properties();
-		driver = baseTest.initialize_driver(browser);
-		driver.get("https://demo.automationtesting.in/Register.html");
-		regPage = new RegPage(driver);
+		baseTest.setupDriver(browser);
+		SeleniumHelper.navigateToURL(getDriver(), Constants.AT_REG_URL);
+		regPage = new RegPage(getDriver());
 	}
-	
-	@AfterMethod
-	public void tearDown() {
-//		baseTest.tearDown();
+
+	@AfterClass
+	public void tearDownClass() {
+		SeleniumHelper.closeAllBrowsers(getDriver());
 	}
-	
-	@Test(dataProvider = "getRegDetails", dataProviderClass = MyDataProvider.class,enabled = true)
+
+	@Test(dataProvider = "getRegDetails", dataProviderClass = MyDataProvider.class, groups = { "Sanity",
+			"Regression" }, enabled = true)
 	@Description(value = "Verify valid Login")
 	@Severity(SeverityLevel.BLOCKER)
 	@Feature(value = "Login Feature")
 	@Epic(value = "Login Functionality")
 	@Story(value = "QA001")
-	public void verifyRegistration(
-			String fName, String lName, String address, String email, String phone, 
-			String gender, String hobbies, String languages, String skills, String country, 
-			String year, String month, String day, String pwd, String cPwd) {
-		
+	public void verifyRegistration(String fName, String lName, String address, String email, String phone,
+			String gender, String hobbies, String languages, String skills, String country, String year, String month,
+			String day, String pwd, String cPwd) {
+
 		regPage.enterFristName(fName);
 		regPage.enterlastName(lName);
 		regPage.enterAddress(address);
@@ -74,6 +68,6 @@ public class TestRegistration {
 		regPage.uploadPhoto(Constants.TESTDATA_IMAGE_PATH);
 		regPage.clickOnSubmit();
 //		regPage.clickOnRefresh();
-		
+
 	}
 }
