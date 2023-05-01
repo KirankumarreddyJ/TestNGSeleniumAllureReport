@@ -1,52 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="5" total="6" passed="1">
+<testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="SmokeTests" duration-ms="6421" started-at="2023-04-30T21:29:27 IST" finished-at="2023-04-30T21:29:34 IST">
+  <suite name="Default suite" duration-ms="13536" started-at="2023-05-01T21:14:26 IST" finished-at="2023-05-01T21:14:39 IST">
     <groups>
+      <group name="Sanity">
+        <method signature="TestRegistration.verifyRegistration(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.TestRegistration@41d7b27f]" name="verifyRegistration" class="tests.TestRegistration"/>
+      </group> <!-- Sanity -->
+      <group name="Regression">
+        <method signature="TestRegistration.verifyRegistration(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.TestRegistration@41d7b27f]" name="verifyRegistration" class="tests.TestRegistration"/>
+      </group> <!-- Regression -->
     </groups>
-    <test name="Test1" duration-ms="6398" started-at="2023-04-30T21:29:27 IST" finished-at="2023-04-30T21:29:34 IST">
-      <class name="tests.LoginTest">
-        <test-method status="PASS" signature="setUpMethod(java.lang.String)[pri:0, instance:tests.LoginTest@1450078a]" name="setUpMethod" is-config="true" duration-ms="3225" started-at="2023-04-30T21:29:29 IST" finished-at="2023-04-30T21:29:32 IST">
+    <test name="Default test" duration-ms="13536" started-at="2023-05-01T21:14:26 IST" finished-at="2023-05-01T21:14:39 IST">
+      <class name="tests.TestRegistration">
+        <test-method status="PASS" signature="setUpSuite()[pri:0, instance:tests.TestRegistration@41d7b27f]" name="setUpSuite" is-config="true" duration-ms="30" started-at="2023-05-01T21:14:26 IST" finished-at="2023-05-01T21:14:26 IST">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpSuite -->
+        <test-method status="PASS" signature="setUpSuperClass(java.lang.String)[pri:0, instance:tests.TestRegistration@41d7b27f]" name="setUpSuperClass" is-config="true" duration-ms="5331" started-at="2023-05-01T21:14:26 IST" finished-at="2023-05-01T21:14:31 IST">
           <params>
             <param index="0">
               <value>
-                <![CDATA[chrome]]>
+                <![CDATA[]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- setUpMethod -->
-        <test-method status="PASS" signature="verifyValidLogin(java.lang.String,java.lang.String)[pri:0, instance:tests.LoginTest@1450078a]" name="verifyValidLogin" duration-ms="396" started-at="2023-04-30T21:29:32 IST" data-provider="getValidLoginData" finished-at="2023-04-30T21:29:33 IST">
+        </test-method> <!-- setUpSuperClass -->
+        <test-method status="PASS" signature="setUpClass()[pri:0, instance:tests.TestRegistration@41d7b27f]" name="setUpClass" is-config="true" duration-ms="2550" started-at="2023-05-01T21:14:31 IST" finished-at="2023-05-01T21:14:34 IST">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpClass -->
+        <test-method status="PASS" signature="verifyRegistration(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:tests.TestRegistration@41d7b27f]" name="verifyRegistration" duration-ms="2836" started-at="2023-05-01T21:14:35 IST" data-provider="getRegDetails" finished-at="2023-05-01T21:14:38 IST">
           <params>
             <param index="0">
               <value>
-                <![CDATA[standard_user]]>
+                <![CDATA[Kiran]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[secret_sauce]]>
+                <![CDATA[Kumar]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[Sample Address]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[me1@test.com]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[1234567890]]>
+              </value>
+            </param>
+            <param index="5">
+              <value>
+                <![CDATA[Male]]>
+              </value>
+            </param>
+            <param index="6">
+              <value>
+                <![CDATA[Cricket;Hockey]]>
+              </value>
+            </param>
+            <param index="7">
+              <value>
+                <![CDATA[English;Hindi]]>
+              </value>
+            </param>
+            <param index="8">
+              <value>
+                <![CDATA[Java]]>
+              </value>
+            </param>
+            <param index="9">
+              <value>
+                <![CDATA[India]]>
+              </value>
+            </param>
+            <param index="10">
+              <value>
+                <![CDATA[2000]]>
+              </value>
+            </param>
+            <param index="11">
+              <value>
+                <![CDATA[April]]>
+              </value>
+            </param>
+            <param index="12">
+              <value>
+                <![CDATA[20]]>
+              </value>
+            </param>
+            <param index="13">
+              <value>
+                <![CDATA[Scret1]]>
+              </value>
+            </param>
+            <param index="14">
+              <value>
+                <![CDATA[Scret1]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- verifyValidLogin -->
-        <test-method status="PASS" signature="tearDownMethod()[pri:0, instance:tests.LoginTest@1450078a]" name="tearDownMethod" is-config="true" duration-ms="669" started-at="2023-04-30T21:29:33 IST" finished-at="2023-04-30T21:29:34 IST">
+        </test-method> <!-- verifyRegistration -->
+        <test-method status="PASS" signature="tearDownSuperClass()[pri:0, instance:tests.TestRegistration@41d7b27f]" name="tearDownSuperClass" is-config="true" duration-ms="761" started-at="2023-05-01T21:14:39 IST" finished-at="2023-05-01T21:14:39 IST">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- tearDownMethod -->
-      </class> <!-- tests.LoginTest -->
-    </test> <!-- Test1 -->
-    <test name="Test2" duration-ms="6" started-at="2023-04-30T21:29:34 IST" finished-at="2023-04-30T21:29:34 IST">
-      <class name="tests.LoginTest">
-        <test-method status="PASS" signature="setUpSuite()[pri:0, instance:tests.LoginTest@466d49f0]" name="setUpSuite" is-config="true" duration-ms="24" started-at="2023-04-30T21:29:27 IST" finished-at="2023-04-30T21:29:27 IST">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUpSuite -->
-      </class> <!-- tests.LoginTest -->
-    </test> <!-- Test2 -->
-  </suite> <!-- SmokeTests -->
+        </test-method> <!-- tearDownSuperClass -->
+      </class> <!-- tests.TestRegistration -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
 </testng-results>

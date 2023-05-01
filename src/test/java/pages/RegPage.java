@@ -7,24 +7,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
 
-import base.BaseTest;
-import helpers.SeleniumHelper;
 import io.qameta.allure.Step;
 
 /*
  * This class contains all Automation registration page web elements & action methods
  */
-public class RegPage extends BaseTest{
-	public static SeleniumHelper selHelper;
-
+public class RegPage extends BasePage{
+	
 	public RegPage(WebDriver driver) {
-		this.driver = driver;
-		PageFactory.initElements(driver, this);
-		selHelper = new SeleniumHelper(this.driver);
-//		PageFactory.initElements(new AjaxElementLocatorFactory(driver, 5), this);
+		super(driver);
 	}
 	
 	@FindBy(xpath = "//input[@ng-model='FirstName']")
@@ -176,7 +168,7 @@ public class RegPage extends BaseTest{
 	
 	@Step("Upload Photo step")
 	public void uploadPhoto(String path) {
-		assertTrue(selHelper.enterVal(chooseFile_btn, path), "Failed to upload photo");
+		assertTrue(selHelper.uploadFile(chooseFile_btn, path), "Failed to upload photo");
 	}
 	
 	@Step("Click on Submit button step")

@@ -1,6 +1,7 @@
 package tests;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
@@ -24,23 +25,15 @@ import pages.LoginPage;
 
 @Listeners(value = TestAllureListener.class)
 public class LoginTest extends BaseTest{
-	protected BaseTest baseTest;
 	protected LoginPage loginPage;
 	protected HomePage homePage;
 	
-	@BeforeMethod(alwaysRun = true)
-	@Parameters({"browser"})
-	public void setUpMethod(@Optional("") String browser) {
-		baseTest = new BaseTest();
-		baseTest.setupDriver(browser);
+	@BeforeClass(alwaysRun = true)
+	public void setUpMethod() {
 		SeleniumHelper.navigateToURL(getDriver(), Constants.SEUCEDEMO_LOGIN_URL);
 		loginPage = new LoginPage(getDriver());
 	}
 	
-	@AfterMethod
-	public void tearDownMethod() {
-		SeleniumHelper.closeAllBrowsers(getDriver());
-	}
 	
 	@Test(dataProvider = "getValidLoginData", dataProviderClass = MyDataProvider.class,enabled = true)
 	@Description(value = "Verify valid Login")

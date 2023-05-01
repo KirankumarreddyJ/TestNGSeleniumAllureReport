@@ -1,13 +1,18 @@
 package listeners;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import base.BaseTest;
+import constants.Constants;
+import helpers.SeleniumHelper;
 import io.qameta.allure.Attachment;
 
 /* #########################################################################
@@ -37,7 +42,7 @@ public class TestAllureListener implements ITestListener {
 			saveTextLog(getTestMethodName(iTestResult) + " passed and screenshot taken!");
 		} else {
 			// Save a log on allure.
-			saveTextLog(getTestMethodName(iTestResult) + " passed!");
+			saveTextLog(SeleniumHelper.getBrowserName(driver)+": "+getTestMethodName(iTestResult) + " passed!");
 		}
 	}
 
@@ -52,13 +57,12 @@ public class TestAllureListener implements ITestListener {
 			System.out.println("Screenshot captured for test case:" + getTestMethodName(iTestResult));
 		}
 		// Save a log on allure.
-		saveTextLog(getTestMethodName(iTestResult) + " failed and screenshot taken!");
+		saveTextLog(SeleniumHelper.getBrowserName(driver)+": "+getTestMethodName(iTestResult) + " failed and screenshot taken!");
 	}
 
 	@Attachment(value = "{0}", type = "text/plain")
 	private String saveTextLog(String message) {
 		return message;
-
 	}
 
 	@Attachment(value = "Page Screenshot", type = "image/png")

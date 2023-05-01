@@ -9,11 +9,13 @@ import java.util.function.Function;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -24,11 +26,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import base.BaseTest;
 import constants.Constants;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import io.qameta.allure.Step;
+
 
 /* #########################################################################
 Class Name   : SeleniumHelper
@@ -44,14 +47,16 @@ public class SeleniumHelper {
 	WebDriver driver;
 	static Properties prop;
 	JavascriptExecutor executor;
-	public WebDriverWait wait;
+	public WebDriverWait waitWD;
+	public FluentWait<WebDriver> waitFL;
 	public Actions actions;
 	private static final int DEFAULT_WAIT = ConfigHelper.getConfigIntVal("DEFAULT_ELEMENT_WAIT_TIME");
 	
 	public SeleniumHelper(WebDriver driver) {
 		this.driver = driver;
 		prop = BaseTest.prop;
-		wait = getWebDriverWait(driver, DEFAULT_WAIT);
+		waitWD = getWebDriverWait(driver, DEFAULT_WAIT);
+		waitFL = getFluentWait(driver, DEFAULT_WAIT);
 	}
 	
 	
@@ -94,7 +99,7 @@ public class SeleniumHelper {
 				System.out.println("IE browser started");
 				break;
 			default:
-				throw new IllegalArgumentException("Browser name is invalid");
+				throw new IllegalArgumentException("Browser name is invalid. Found '"+browser+"' but Expected [Chrome, Firefox, Edge, IE]");
 			}
 			SeleniumHelper.maximizeBrowser(driver);
 			SeleniumHelper.setPageLoadTimeout(driver, Constants.PAGE_LOAD_TIMEOUT);
@@ -311,7 +316,9 @@ public class SeleniumHelper {
 	##################################################################### */
 	public static boolean closeOnlyFocusedWindowOrTab(WebDriver driver) {
 		try {
-			driver.close();
+			if(driver != null) {
+				driver.quit();
+			}
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -330,7 +337,9 @@ public class SeleniumHelper {
 	##################################################################### */
 	public static boolean closeAllBrowsers(WebDriver driver) {
 		try {
-			driver.quit();
+			if(driver != null) {
+				driver.quit();
+			}
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -352,6 +361,29 @@ public class SeleniumHelper {
 	public static WebDriverWait getWebDriverWait(WebDriver driver, int seconds) {
 		try {
 			return new WebDriverWait(driver, Duration.ofSeconds(seconds));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/*   ###############################################################
+	Method Name  : getFluentWait
+	Purpose      : To create FluentWait object
+	Input        : WebDriver driver, int seconds
+	Output       : FluentWait<WebDriver> or null
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 01/05/2023 
+	##################################################################### */
+	public static FluentWait<WebDriver> getFluentWait(WebDriver driver, int seconds) {
+		try {
+			return new FluentWait<WebDriver>(driver)
+					.ignoring(NoSuchElementException.class)
+					.ignoring(WebDriverException.class)
+					.ignoring(StaleElementReferenceException.class)
+					.withTimeout(Duration.ofSeconds(seconds))
+					.pollingEvery(Duration.ofSeconds(1));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -388,6 +420,26 @@ public class SeleniumHelper {
 	public static JavascriptExecutor getJavascriptExecutor(WebDriver driver) {
 		try {
 			return ((JavascriptExecutor) driver);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/*   ###############################################################
+	Method Name  : getBrowserName
+	Purpose      : To get the name of browser
+	Input        : None
+	Output       : String browser name or null
+	
+	Created By   : Kirankumar Reddy Juturu(jkirankumarreddy9@gmail.com)
+	Created Date : 01/05/2023 
+	##################################################################### */
+	public static String getBrowserName(WebDriver driver) {
+		try {
+			Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
+		    String browserName = cap.getBrowserName().toLowerCase();
+			return browserName;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -441,7 +493,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public WebElement getWebElement(By byLocater) {
 		try {
-			return wait.until(ExpectedConditions.visibilityOfElementLocated(byLocater));
+			return waitWD.until(ExpectedConditions.visibilityOfElementLocated(byLocater));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -481,7 +533,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean verifyDisplayed(By byLocater) {
 		try {
-			return wait.until(ExpectedConditions.visibilityOfElementLocated(byLocater)).isDisplayed();
+			return waitFL.until(ExpectedConditions.visibilityOfElementLocated(byLocater)).isDisplayed();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -499,7 +551,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean verifyDisplayed(WebElement element) {
 		try {
-			return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
+			return waitFL.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -517,7 +569,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean verifyDisplayed(WebElement element, int waitTime) {
 		try {
-			return getWebDriverWait(driver, waitTime).until(ExpectedConditions.visibilityOf(element)).isDisplayed();
+			return getFluentWait(driver, waitTime).until(ExpectedConditions.visibilityOf(element)).isDisplayed();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -535,7 +587,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean verifyEnabled(WebElement element) {
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			waitWD.until(ExpectedConditions.elementToBeClickable(element));
 			return element.isEnabled();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -573,17 +625,12 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean verifyDisabled(WebElement element) {
 		try {
-			FluentWait<WebDriver> fWait = new FluentWait<WebDriver>(driver)
-					.pollingEvery(Duration.ofSeconds(2))
-					.withTimeout(Duration.ofSeconds(DEFAULT_WAIT))
-					.ignoring(StaleElementReferenceException.class)
-					.ignoring(NoSuchElementException.class);
 			Function<WebDriver, Boolean> disabled = new Function<WebDriver, Boolean>() {
 			    public Boolean apply(WebDriver driver) {
 			    return !element.isEnabled();
 			    }
 			};		
-			fWait.until(disabled);
+			waitFL.until(disabled);
 			return !element.isEnabled();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -602,17 +649,12 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean verifyDisabled(WebElement element, int waitTime) {
 		try {
-			FluentWait<WebDriver> fWait = new FluentWait<WebDriver>(driver)
-					.pollingEvery(Duration.ofSeconds(2))
-					.withTimeout(Duration.ofSeconds(waitTime))
-					.ignoring(StaleElementReferenceException.class)
-					.ignoring(NoSuchElementException.class);
 			Function<WebDriver, Boolean> disabled = new Function<WebDriver, Boolean>() {
 			    public Boolean apply(WebDriver driver) {
 			    return !element.isEnabled();
 			    }
 			};		
-			fWait.until(disabled);
+			waitFL.until(disabled);
 			return !element.isEnabled();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -631,7 +673,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean verifySelected(WebElement element) {
 		try {
-			wait.until(ExpectedConditions.elementToBeSelected(element));
+			waitWD.until(ExpectedConditions.elementToBeSelected(element));
 			return element.isEnabled();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -741,7 +783,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean submit(WebElement element){
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			waitWD.until(ExpectedConditions.elementToBeClickable(element));
 			element.submit();
 			return true;
 		} catch (Exception e) {
@@ -785,7 +827,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean enterVal(WebElement element, String value) {
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			waitWD.until(ExpectedConditions.elementToBeClickable(element));
 			element.clear();
 			element.sendKeys(value);
 			return true;
@@ -808,7 +850,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean selectDropdownByName(WebElement element, String optName) {
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			waitWD.until(ExpectedConditions.elementToBeClickable(element));
 			Select dropdown = new Select(element);
 			dropdown.selectByVisibleText(optName.trim());
 			return true;
@@ -829,7 +871,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean selectDropdownByIndex(WebElement element, int optIndex) {
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			waitWD.until(ExpectedConditions.elementToBeClickable(element));
 			Select dropdown = new Select(element);
 			dropdown.selectByIndex(optIndex);
 			return true;
@@ -850,7 +892,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean selectDropdownByValue(WebElement element, String optValue) {
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			waitWD.until(ExpectedConditions.elementToBeClickable(element));
 			Select dropdown = new Select(element);
 			dropdown.selectByValue(optValue);
 			return true;
@@ -871,7 +913,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public List<WebElement> getDropdownOpts(WebElement element) {
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			waitWD.until(ExpectedConditions.elementToBeClickable(element));
 			Select dropdown = new Select(element);
 			List<WebElement> options = dropdown.getOptions();
 			return options;
@@ -892,7 +934,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public String getSelectedDropdownOpt(WebElement element) {
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			waitWD.until(ExpectedConditions.elementToBeClickable(element));
 			Select dropdown = new Select(element);
 			 String option = dropdown.getFirstSelectedOption().getText();
 			return option;
@@ -913,7 +955,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public List<WebElement> getListOfSelectedDropdownOpts(WebElement element) {
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			waitWD.until(ExpectedConditions.elementToBeClickable(element));
 			Select dropdown = new Select(element);
 			 List<WebElement> options = dropdown.getAllSelectedOptions();
 			return options;
@@ -1104,7 +1146,7 @@ public class SeleniumHelper {
 	##################################################################### */
 	public boolean uploadFile(WebElement element, String fileAbsolutePath) {
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			waitWD.until(ExpectedConditions.elementToBeClickable(element));
 			element.sendKeys(fileAbsolutePath);
 			return true;
 		} catch (Exception e) {

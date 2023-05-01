@@ -15,16 +15,11 @@ import io.qameta.allure.Step;
 /*
  * This class contains all Login page web elements & action methods
  */
-public class LoginPage extends BaseTest{
+public class LoginPage extends BasePage{
 	public final static String LOGINPAGEURL = "https://www.saucedemo.com/";
-	public static SeleniumHelper selHelper;
-	
 	
 	public LoginPage(WebDriver driver) {
-		this.driver = driver;
-		PageFactory.initElements(driver, this);
-		selHelper = new SeleniumHelper(this.driver);
-//		PageFactory.initElements(new AjaxElementLocatorFactory(driver, 5), this);
+		super(driver);
 	}
 	
 	@FindBy(id = "user-name")

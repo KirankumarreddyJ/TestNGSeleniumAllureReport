@@ -3,10 +3,14 @@ package base;
 import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 
 import helpers.ConfigHelper;
 import helpers.SeleniumHelper;
@@ -48,6 +52,17 @@ public class BaseTest {
 //	public void tearDownTest() {
 //		// Write code to execute after test execution
 //	}
+	
+	@BeforeClass(alwaysRun = true)
+	@Parameters({ "browser" })
+	public void setUpSuperClass(@Optional("") String browser) {
+		setupDriver(browser);
+	}
+	
+	@AfterClass(alwaysRun = true)
+	public void tearDownSuperClass() {
+		SeleniumHelper.closeAllBrowsers(getDriver());
+	}
 	
 	/*   ###############################################################
 	Method Name  : setupDriver

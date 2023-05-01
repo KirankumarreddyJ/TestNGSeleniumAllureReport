@@ -5,16 +5,19 @@
     <listener class-name="listeners.TestAllureListener"/>
     <listener class-name="listeners.AnnotationTransfer"/>
   </listeners>
-  <test thread-count="2" name="Test1(failed)">
+  <test thread-count="2" name="Test2(failed)">
     <parameter name="browser" value="chrome"/>
     <classes>
       <class name="tests.LoginTest">
         <methods>
-          <include name="verifyValidLogin"/>
-          <include name="setUp"/>
-          <include name="tearDown"/>
+          <include name="setUpMethod"/>
+          <include name="verifyInValidLogin" invocation-numbers="0"/>
+          <include name="setUpSuperClass"/>
+          <include name="setUpSuite"/>
+          <include name="tearDownMethod"/>
+          <include name="tearDownSuperClass"/>
         </methods>
       </class> <!-- tests.LoginTest -->
     </classes>
-  </test> <!-- Test1(failed) -->
+  </test> <!-- Test2(failed) -->
 </suite> <!-- Failed suite [SmokeTests] -->

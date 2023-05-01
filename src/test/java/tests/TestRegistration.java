@@ -1,10 +1,7 @@
 package tests;
 
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import base.BaseTest;
@@ -22,21 +19,12 @@ import pages.RegPage;
 
 @Listeners(value = TestAllureListener.class)
 public class TestRegistration extends BaseTest {
-	protected BaseTest baseTest;
 	protected RegPage regPage;
 
 	@BeforeClass(alwaysRun = true)
-	@Parameters({ "browser" })
-	public void setUpClass(@Optional("") String browser) {
-		baseTest = new BaseTest();
-		baseTest.setupDriver(browser);
+	public void setUpClass() {
 		SeleniumHelper.navigateToURL(getDriver(), Constants.AT_REG_URL);
 		regPage = new RegPage(getDriver());
-	}
-
-	@AfterClass
-	public void tearDownClass() {
-		SeleniumHelper.closeAllBrowsers(getDriver());
 	}
 
 	@Test(dataProvider = "getRegDetails", dataProviderClass = MyDataProvider.class, groups = { "Sanity",
