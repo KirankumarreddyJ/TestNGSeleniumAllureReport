@@ -1,16 +1,13 @@
 package pages;
 
+import static helpers.AllureLogUril.logALStep;
 import static org.testng.Assert.assertEquals;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import base.BaseTest;
-import helpers.SeleniumHelper;
 import io.qameta.allure.Step;
 
 /*
@@ -33,16 +30,19 @@ public class HomePage extends BasePage{
 	public void verifyLoginSuccess() {
 		selHelper.waitWD.until(ExpectedConditions.urlContains(HOMEPAGEURL));
 		assertEquals(selHelper.getCurrentURL(), HOMEPAGEURL);
+		logALStep("Login Successfull!");
 	}
 	
 	@Step(value = "Verify user logout successful step")
 	public void logout() {
 		//using selenium helper
 		selHelper.click(menuIcon);
+		logALStep("Clicked on Menu icon");
 		selHelper.click(logoutBtn);
+		logALStep("Clicked on Logout button");
 		selHelper.waitWD.until(ExpectedConditions.urlContains(LoginPage.LOGINPAGEURL));
 		assertEquals(selHelper.getCurrentURL(), LoginPage.LOGINPAGEURL);
-		
+		logALStep("Logout Successfull!");
 	}
 	
 	

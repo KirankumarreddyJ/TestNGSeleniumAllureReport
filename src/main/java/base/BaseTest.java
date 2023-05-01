@@ -12,8 +12,10 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
+import static helpers.AllureLogUril.logALStep;
 import helpers.ConfigHelper;
 import helpers.SeleniumHelper;
+import io.qameta.allure.Step;
 
 /* #########################################################################
 Class Name   : BaseTest
@@ -30,9 +32,11 @@ public class BaseTest {
 	public WebDriver driver;
 	public static Properties prop;
 	
+	
 	public static ThreadLocal<WebDriver> tdriver = new ThreadLocal<>();
 	
 	@BeforeSuite(alwaysRun = true)
+	@Step(value = "Initialize properties file step")
 	public void setUpSuite() {
 		//Loads the properties file
 		prop = ConfigHelper.initialize_Properties();
@@ -55,13 +59,19 @@ public class BaseTest {
 	
 	@BeforeClass(alwaysRun = true)
 	@Parameters({ "browser" })
+	@Step(value = "Launch browser and setup driver step")
 	public void setUpSuperClass(@Optional("") String browser) {
 		setupDriver(browser);
+		logALStep("Launched '"+SeleniumHelper.getBrowserName(getDriver())+"' browser successfully");
 	}
 	
 	@AfterClass(alwaysRun = true)
+	@Step(value = "Close All Browsers opened by tests setup")
 	public void tearDownSuperClass() {
-		SeleniumHelper.closeAllBrowsers(getDriver());
+		if(SeleniumHelper.closeAllBrowsers(getDriver())) {
+			logALStep("Closed All Browsers opened by tests");
+		}
+		
 	}
 	
 	/*   ###############################################################

@@ -1,6 +1,7 @@
 package tests;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -13,17 +14,21 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Step;
 import io.qameta.allure.Story;
 import listeners.TestAllureListener;
+import static helpers.AllureLogUril.logALStep;
 import pages.RegPage;
 
 @Listeners(value = TestAllureListener.class)
 public class TestRegistration extends BaseTest {
 	protected RegPage regPage;
 
-	@BeforeClass(alwaysRun = true)
-	public void setUpClass() {
+	@BeforeMethod(alwaysRun = true)
+	@Step(value = "Navigate to URL step")
+	public void setUpMethod() {
 		SeleniumHelper.navigateToURL(getDriver(), Constants.AT_REG_URL);
+		logALStep("Navigated to URL: "+Constants.AT_REG_URL);
 		regPage = new RegPage(getDriver());
 	}
 
@@ -56,6 +61,8 @@ public class TestRegistration extends BaseTest {
 		regPage.uploadPhoto(Constants.TESTDATA_IMAGE_PATH);
 		regPage.clickOnSubmit();
 //		regPage.clickOnRefresh();
+		
+		logALStep("Completed this testcase execution");
 
 	}
 }

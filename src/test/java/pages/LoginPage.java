@@ -1,15 +1,12 @@
 package pages;
 
+import static helpers.AllureLogUril.logALStep;
 import static org.testng.Assert.assertEquals;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
-import base.BaseTest;
-import helpers.SeleniumHelper;
 import io.qameta.allure.Step;
 
 /*
@@ -34,9 +31,13 @@ public class LoginPage extends BasePage{
 	@Step(value = "Login with username {0} and password {1} step")
 	public HomePage login(String username, String pwd){
 		selHelper.enterVal(userId, username);
+		logALStep(String.format("Entered '%s' as Username",username));
 		selHelper.enterVal(password, pwd);
+		logALStep(String.format("Entered '%s' as Password",pwd));
 		selHelper.click(loginBtn);
+		logALStep("Clicked on Login button");
 		assertEquals(selHelper.getCurrentURL(), HomePage.HOMEPAGEURL);
+		logALStep("Login successfull!");
 		return  new HomePage(driver);
 	}
 	

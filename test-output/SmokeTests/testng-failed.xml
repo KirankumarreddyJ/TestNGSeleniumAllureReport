@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite thread-count="2" guice-stage="DEVELOPMENT" name="Failed suite [SmokeTests]">
+<suite thread-count="2" guice-stage="DEVELOPMENT" name="Failed suite [SmokeTests]" parallel="tests">
   <listeners>
     <listener class-name="listeners.TestAllureListener"/>
     <listener class-name="listeners.AnnotationTransfer"/>
   </listeners>
-  <test thread-count="2" name="Test2(failed)">
+  <test thread-count="2" name="Test1 on Chrome(failed)" parallel="tests">
     <parameter name="browser" value="chrome"/>
     <classes>
       <class name="tests.LoginTest">
         <methods>
           <include name="setUpMethod"/>
-          <include name="verifyInValidLogin" invocation-numbers="0"/>
+          <include name="verifyValidLogin" invocation-numbers="0 0"/>
           <include name="setUpSuperClass"/>
           <include name="setUpSuite"/>
-          <include name="tearDownMethod"/>
           <include name="tearDownSuperClass"/>
         </methods>
       </class> <!-- tests.LoginTest -->
     </classes>
-  </test> <!-- Test2(failed) -->
+  </test> <!-- Test1 on Chrome(failed) -->
+  <test thread-count="2" name="Test2 on Edge(failed)" parallel="tests">
+    <parameter name="browser" value="Edge"/>
+    <classes>
+      <class name="tests.LoginTest">
+        <methods>
+          <include name="setUpMethod"/>
+          <include name="verifyInValidLogin" invocation-numbers="0 0"/>
+          <include name="setUpSuperClass"/>
+          <include name="setUpSuite"/>
+          <include name="verifyValidLoginLogout" invocation-numbers="0 0"/>
+          <include name="tearDownSuperClass"/>
+        </methods>
+      </class> <!-- tests.LoginTest -->
+    </classes>
+  </test> <!-- Test2 on Edge(failed) -->
 </suite> <!-- Failed suite [SmokeTests] -->
